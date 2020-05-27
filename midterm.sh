@@ -1,8 +1,10 @@
 #!/bin/bash
 
+# CHANGE THIS TO ONE OF YOUR AWS KEYS BEFORE RUNNING
+sshKey='aws'
+
 # grab my local public IP
 lPubIp="`curl -s https://checkip.amazonaws.com`/32"
-sshKey='aws'
 amiID='068663a3c619dd892' # ubuntu 20.04
 iCount='1'
 iType='t2.micro'
