@@ -10,9 +10,13 @@
 - Scripts are all commented
   - You script accurately describes what is happening as the script progresses
 ## Script Use:
+Ensure you have proper `~/.aws/credentials` setup. [aws-cli credentials docs](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html)
 ```
 git clone https://github.com/dxking/it254-midterm
 cd it254-midterm/
 chmod +x src/*.sh
 src/midterm.sh
 ```
+
+## SSH Key:
+This script will create a keypair and put the private key in: `~/.ssh/midterm.pem`
