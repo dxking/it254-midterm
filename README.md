@@ -9,3 +9,10 @@
   - by navigating to the automatically generated url or the public ip address you website is viewable over the internet
 - Scripts are all commented
   - You script accurately describes what is happening as the script progresses
+## Script Use:
+```
+git clone https://github.com/dxking/it254-midterm
+cd it254-midterm/
+chmod +x src/*.sh
+src/midterm.sh
+```
