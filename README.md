@@ -11,6 +11,7 @@
   - You script accurately describes what is happening as the script progresses
 ## Script Use:
 Ensure you have proper `~/.aws/credentials` setup. [aws-cli credentials docs](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html)
+
 From a Linux command line run:
 ```
 git clone https://github.com/dxking/it254-midterm
