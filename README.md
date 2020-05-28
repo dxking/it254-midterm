@@ -1,4 +1,5 @@
 # it254-midterm
+
 ## Criteria:
 - Script Starts an EC2 Micro Server
   - Using the aws cli you successfully launch a free tier eligible linux server
