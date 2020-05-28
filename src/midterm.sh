@@ -1,18 +1,21 @@
 #!/bin/bash
+rand=`head /dev/urandom | tr -dc a-z0-9 | head -c 5`
 
-# CHANGE THIS TO ONE OF YOUR AWS KEYS BEFORE RUNNING
-sshKey='aws'
+# generate a new aws keypair and ensure correct key permissions
+sshKey="aws-$rand"
+aws ec2 create-key-pair --key-name $sshKey --query 'KeyMaterial' --output text > ~/.ssh/$sshKey.pem
+chmod 400 ~/.ssh/$sshKey.pem
 
-# grab my local public IP
+# grab my local public IP for hardening instance SSH access
 lPubIp="`curl -s https://checkip.amazonaws.com`/32"
-amiID='068663a3c619dd892' # ubuntu 20.04
+amiId='ami-068663a3c619dd892' # ubuntu 20.04
 iCount='1'
 iType='t2.micro'
 # grab default vpc Id
 iVpcId=`aws ec2 describe-vpcs --filters Name=isDefault,Values=true | jq --raw-output '.Vpcs[0].VpcId'`
 
 # create security group and find Id with jq
-iSgName="midterm-sg-`head /dev/urandom | tr -dc a-z0-9 | head -c 3`"
+iSgName="midterm-sg-$rand"
 iSg=`aws ec2 create-security-group --group-name $iSgName --description 'midterm security group' --vpc-id $iVpcId`
 iSgId=`echo $iSg | jq --raw-output '.GroupId'`
 
@@ -22,9 +25,20 @@ aws ec2 authorize-security-group-ingress --group-id $iSgId --protocol tcp --port
 
 # launch ec2 instance and send kickstart.sh to run once instance is up
 instance=`aws ec2 run-instances \
---image-id ami-$amiID \
---count $iCount \
---instance-type $iType \
---key-name $sshKey \
---security-group-ids $iSgId \
---user-data file://kickstart.sh`
+  --image-id $amiId \
+  --count $iCount \
+  --instance-type $iType \
+  --key-name $sshKey \
+  --security-group-ids $iSgId \
+  --user-data file://src/kickstart.sh`
+
+iId=`echo $instance | jq --raw-output '.Instances[0].InstanceId'`
+iPubIp=`aws ec2 describe-instances --instance-id $iId| jq --raw-output .Reservations[].Instances[].PublicIpAddress`
+
+echo "Instance Public Ip: $iPubIp"
+echo "Instance Private Key: ~/.ssh/$sshKey.pem"
+
+# tag custom resources
+aws ec2 create-tags \
+  --resources $amiId $iSgId $iId \
+  --tags Key=project,Value=midterm

@@ -11,6 +11,7 @@
   - You script accurately describes what is happening as the script progresses
 ## Script Use:
 Ensure you have proper `~/.aws/credentials` setup. [aws-cli credentials docs](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html)
+From a Linux command line run:
 ```
 git clone https://github.com/dxking/it254-midterm
 cd it254-midterm/
@@ -19,4 +20,7 @@ src/midterm.sh
 ```
 
 ## SSH Key:
-This script will create a keypair and put the private key in: `~/.ssh/midterm.pem`
+This script will create a keypair and put the private key in: `~/.ssh/aws-xxxxx.pem` (where the x's are a randomly generated string per script run)
+
+### todo:
+- auto cleanup of instance and custom resources
